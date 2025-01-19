@@ -13,9 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/STLLoader.js"></script>
     <script>
-        // 創建場景和相機
+        // 創建場景、相機和渲染器
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
@@ -28,27 +27,31 @@
 
         // 添加光源
         const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5).normalize();
+        light.position.set(5, 5, 5);
         scene.add(light);
 
-        // 加載 STL 模型
-        const loader = new THREE.STLLoader();
-        loader.load('path_to_your_model.stl', function (geometry) {
-            const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
-            const mesh = new THREE.Mesh(geometry, material);
-            scene.add(mesh);
-            mesh.position.set(0, 0, 0);
-        });
+        // 加載 GLTF 模型
+        const loader = new THREE.GLTFLoader();
+        loader.load('la_procope.gltf', function (gltf) {
+            const model = gltf.scene;
+            scene.add(model);
 
-            // 調整模型大小和位置
+            // 縮放模型
+            model.scale.set(0.1, 0.1, 0.1);
+
+            // 確保模型居中
             model.position.set(0, 0, 0);
-            model.scale.set(1, 1, 1); // 根據需要調整比例
         }, undefined, function (error) {
             console.error('Error loading model:', error);
         });
 
+        // 添加輔助坐標軸（幫助確認位置）
+        const axesHelper = new THREE.AxesHelper(5);
+        scene.add(axesHelper);
+
         // 設置相機位置
-        camera.position.set(3, 3, 3);
+        camera.position.set(3, 3, 5);
+        camera.lookAt(0, 0, 0);
 
         // 渲染循環
         function animate() {
