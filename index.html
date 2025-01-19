@@ -3,34 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D GLTF Model Viewer</title>
+    <title>3D Model Viewer</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        canvas {
-            display: block;
-        }
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
     </style>
 </head>
 <body>
-    <!-- 引入 Three.js 和 GLTFLoader -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
     <script>
-        // 創建場景、相機和渲染器
+        // 創建場景和相機
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // 添加軌道控制器
+        // 添加軌道控制
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; // 啟用阻尼效果
-        controls.dampingFactor = 0.05;
+        controls.enableDamping = true;
 
         // 添加光源
         const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -39,22 +32,24 @@
 
         // 加載 GLTF 模型
         const loader = new THREE.GLTFLoader();
-        loader.load('la_procope.gltf', function (gltf) {
+        loader.load('laprocope.gltf', function (gltf) {
             const model = gltf.scene;
             scene.add(model);
-            model.position.set(0, 0, 0); // 可調整模型位置
-            model.scale.set(1, 1, 1);   // 可調整模型大小
+
+            // 調整模型大小和位置
+            model.position.set(0, 0, 0);
+            model.scale.set(1, 1, 1); // 根據需要調整比例
         }, undefined, function (error) {
-            console.error('An error occurred while loading the model:', error);
+            console.error('Error loading model:', error);
         });
 
         // 設置相機位置
         camera.position.set(3, 3, 3);
 
-        // 動畫循環
+        // 渲染循環
         function animate() {
             requestAnimationFrame(animate);
-            controls.update(); // 更新軌道控制器
+            controls.update();
             renderer.render(scene, camera);
         }
         animate();
