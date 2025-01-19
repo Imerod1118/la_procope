@@ -39,7 +39,7 @@
 
         // 加載 GLTF 模型
         const loader = new THREE.GLTFLoader();
-        loader.load('path_to_your_model.gltf', function (gltf) {
+        loader.load('la_procope.gltf', function (gltf) {
             const model = gltf.scene;
             scene.add(model);
             model.position.set(0, 0, 0); // 可調整模型位置
