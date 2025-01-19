@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/STLLoader.js"></script>
     <script>
         // 創建場景和相機
         const scene = new THREE.Scene();
@@ -30,11 +31,14 @@
         light.position.set(5, 5, 5).normalize();
         scene.add(light);
 
-        // 加載 GLTF 模型
-        const loader = new THREE.GLTFLoader();
-        loader.load('laprocope.gltf', function (gltf) {
-            const model = gltf.scene;
-            scene.add(model);
+        // 加載 STL 模型
+        const loader = new THREE.STLLoader();
+        loader.load('path_to_your_model.stl', function (geometry) {
+            const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+            mesh.position.set(0, 0, 0);
+        });
 
             // 調整模型大小和位置
             model.position.set(0, 0, 0);
